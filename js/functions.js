@@ -46,6 +46,26 @@ isPalindrome2('ДовОд ');
 isPalindrome2('Кекс');
 isPalindrome2('Лёша на полке клопа нашёл ');
 
+//Функция проверяет является ли строка палиндромом: true / false. Вариант 3
+
+const isPalindrome3 = (string) => {
+  string = string.replaceAll(' ', '').toLowerCase();
+
+  let left = 0;
+  let right = string.length - 1;
+
+  while (left <= right) {
+    if (string[left] !== string[right]) {
+      return false;
+    }
+    left++;
+    right--;
+  }
+  return true;
+};
+
+isPalindrome3('Лёша на полке клопа нашёл ');
+
 //Функция извлекает цифры из строки и возвращает в виде целого положительного числа
 // Вариант 1
 
