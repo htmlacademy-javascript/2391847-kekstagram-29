@@ -105,3 +105,36 @@ const extractDigits2 = function (parameter) {
 };
 
 extractDigits2('2023 год');
+
+
+// Функция проверяет, что встреча не выходит за рамки рабочего дня.
+
+const checkMeetingTime = (StartTime, EndTime, mitingStartTime, meetingDuration) => {
+
+  const getTimeInMinutes = (time) => {
+    const splittedTime = time.split(':');
+    const timeInMinutes = parseInt(splittedTime[0], 10) * 60 + parseInt(splittedTime[1], 10);
+    return timeInMinutes;
+  };
+
+  const DayStartInMinutes = getTimeInMinutes(StartTime);
+  const DayEndInMinutes = getTimeInMinutes(EndTime);
+  const mitingStartInMinutes = getTimeInMinutes(mitingStartTime);
+
+  if (mitingStartInMinutes < DayStartInMinutes) {
+    return false;
+  }
+  if (mitingStartInMinutes > DayEndInMinutes) {
+    return false;
+  }
+  return (mitingStartInMinutes + meetingDuration <= DayEndInMinutes);
+
+};
+
+checkMeetingTime('08:05', '17:30', '14:0', 90);
+
+// console.log(checkMeetingTime('08:05', '17:30', '14:0', 90)); // true
+// console.log(checkMeetingTime('8:0', '10:0', '8:0', 120));     // true
+// console.log(checkMeetingTime('08:0', '14:30', '14:00', 90)); // false
+// console.log(checkMeetingTime('14:00', '17:30', '08:0', 90));  // false
+// console.log(checkMeetingTime('8:00', '17:30', '08:00', 900)); // false
