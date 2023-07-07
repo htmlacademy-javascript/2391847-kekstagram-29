@@ -2,7 +2,7 @@
 const thumbnailsList = document.querySelector('.pictures');
 const thumbnailsTemplate = document.querySelector('#picture').content;
 
-
+// создает одну миниаюру
 const createThumbnail = ({url, description, likes, comments}) => {
 
   const thumbnailElement = thumbnailsTemplate.cloneNode(true);
@@ -16,6 +16,7 @@ const createThumbnail = ({url, description, likes, comments}) => {
 };
 
 
+// отрисовывает массив миниатюр
 const renderThumbnails = (photoDescriptions) => {
 
   const thumbnailsListFragment = document.createDocumentFragment();
@@ -29,4 +30,4 @@ const renderThumbnails = (photoDescriptions) => {
 };
 
 
-export {renderThumbnails};
+export { renderThumbnails };
