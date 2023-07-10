@@ -1,4 +1,4 @@
-const serverAdress = 'http://localhost:3000/';
+// const serverAdress = 'http://localhost:3000/';
 
 const imageView = document.querySelector('.big-picture');
 const imageDescription = imageView.querySelector('.social__caption');
@@ -37,9 +37,9 @@ const createCommentsList = (comments) => {
 
 // отрисовывает окно просмотра полноразмерного изображения и информации о фото
 const renderImageView = (evt, photoData) => {
-  const thumbnailUrl = evt.target.src;
+  const thumbnailUrl = evt.target.getAttribute('src');
   const { url, description, likes, comments } = photoData.find((element) =>
-    serverAdress + element.url === thumbnailUrl
+    element.url === thumbnailUrl
   );
 
   fullSizeImage.src = url;
