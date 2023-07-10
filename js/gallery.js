@@ -6,12 +6,7 @@ import { isEscapeKey } from './util.js';
 const thumbnailsList = document.querySelector('.pictures');
 const imageView = document.querySelector('.big-picture');
 const imageViewCloseButton = imageView.querySelector('.big-picture__cancel');
-const commentCounterElement = imageView.querySelector('.social__comment-count');
-const moreCommentsButton = imageView.querySelector('.comments-loader');
 
-// отрисовывает миниатюры
-const photoDescriptions = createPhotoDescriptions();
-renderThumbnails(photoDescriptions);
 
 // закрывает окно просмотра изображения по кнопке Esc
 const onDocumentKeydown = (evt) => {
@@ -21,13 +16,9 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-
 // открывает окно просмотра изображения
 function openImageView () {
   imageView.classList.remove('hidden');
-
-  commentCounterElement.classList.add('hidden');
-  moreCommentsButton.classList.add('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
@@ -42,17 +33,32 @@ function closeImageView () {
 }
 
 // открывает окно просмотра изображения при клике на миниатюру
-const onThumbnailClick = (evt) => {
-  if (evt.target.matches('img[class="picture__img"]')) {
+const onThumbnailClick = (evt, photoData) => {
+  const thumbnail = evt.target.closest('[data-index]');
+  const thumbnailId = +thumbnail.dataset.index;
+
+  const photoDataElement = photoData.find((element) => element.id === thumbnailId);
+
+  if (thumbnail) {
+    renderImageView(photoDataElement);
     openImageView();
-    renderImageView(evt, photoDescriptions);
+
+    // добавляет слушателя события "клик" на крестик окна просмотра изображения
+    imageViewCloseButton.addEventListener('click', () => {
+      closeImageView();
+    });
   }
 };
 
-// добавляет слушателя события "клик" на контейнер с миниатюрами
-thumbnailsList.addEventListener('click', onThumbnailClick);
+// отрисовывает галлерею
+const renderGallery = () => {
+  const photoDescriptions = createPhotoDescriptions();
+  renderThumbnails(photoDescriptions);
 
-// добавляет слушателя события "клик" на крестик окна просмотра изображения
-imageViewCloseButton.addEventListener('click', () => {
-  closeImageView();
-});
+  // добавляет слушателя события "клик" на контейнер с миниатюрами
+  thumbnailsList.addEventListener('click', (evt) => {
+    onThumbnailClick(evt, photoDescriptions);
+  });
+};
+
+export { renderGallery };
