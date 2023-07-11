@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArrayElement, createId} from './util.js';
+import { getRandomInteger, getRandomArrayElement, createId } from './util.js';
 
 const PHOTO_DESCRIPTION_COUNT = 25;
 const COMMENTS_MAX = 30;
@@ -31,7 +31,7 @@ const DESCRIPTIONS = [
   'Мечта сбылась!',
   'Отличный вид',
   'Никогда так не делайте!',
-  'Мерзнем в Альпах',
+  'Ой, всё',
   'Мгновенная карма',
 ];
 
@@ -44,15 +44,18 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
+// вызывает функцию-генератор id с отдельным лексическим окружением для каждого вызова (замыкание)
 const generatePhotoId = createId();
 const generatePhotoURL = createId();
 const generateCommentId = createId();
 
+// создает массив из 1 или 2 сообщений
 const createMessage = () => {
   const messages = Array.from({length: getRandomInteger(1, 2)}, () => getRandomArrayElement(MESSAGES));
   return messages.join(' ');
 };
 
+// создает комментарий
 const createComment = () => ({
   id: generateCommentId(),
   avatar: `img/avatar-${getRandomInteger(1, AVATAR_QUANTITY)}.svg`,
@@ -60,6 +63,7 @@ const createComment = () => ({
   name: getRandomArrayElement(NAMES),
 });
 
+// генерирует описание к фотографии
 const createPhotoDescription = () => ({
   id: generatePhotoId(),
   url: `photos/${generatePhotoURL()}.jpg`,
@@ -68,6 +72,7 @@ const createPhotoDescription = () => ({
   comments: Array.from({length: getRandomInteger(0, COMMENTS_MAX)}, createComment),
 });
 
+// создает массив из сгенерированных описаний к фотографиям
 const createPhotoDescriptions = () => Array.from({length: PHOTO_DESCRIPTION_COUNT}, createPhotoDescription);
 
-export {createPhotoDescriptions};
+export { createPhotoDescriptions };
