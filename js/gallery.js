@@ -1,36 +1,12 @@
 import { createPhotoDescriptions } from './data.js';
 import { renderThumbnails } from './render-thumbnails.js';
 import { renderImageView } from './render-image-view.js';
-import { isEscapeKey } from './util.js';
+import { openImageView, closeImageView } from './util.js';
 
 const thumbnailsList = document.querySelector('.pictures');
 const imageView = document.querySelector('.big-picture');
 const imageViewCloseButton = imageView.querySelector('.big-picture__cancel');
 
-
-// закрывает окно просмотра изображения по кнопке Esc
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeImageView();
-  }
-};
-
-// открывает окно просмотра изображения
-function openImageView () {
-  imageView.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onDocumentKeydown);
-}
-
-// закрывает окно просмотра изображения
-function closeImageView () {
-  imageView.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-
-  document.removeEventListener('keydown', onDocumentKeydown);
-}
 
 // открывает окно просмотра изображения при клике на миниатюру
 const onThumbnailClick = (evt, photoData) => {
@@ -41,11 +17,11 @@ const onThumbnailClick = (evt, photoData) => {
 
   if (thumbnail) {
     renderImageView(photoDataElement);
-    openImageView();
+    openImageView(imageView);
 
     // добавляет слушателя события "клик" на крестик окна просмотра изображения
     imageViewCloseButton.addEventListener('click', () => {
-      closeImageView();
+      closeImageView(imageView);
     });
   }
 };
