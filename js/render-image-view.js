@@ -2,11 +2,11 @@ const COMMENTS_LOAD_LIMIT = 5;
 
 const imageView = document.querySelector('.big-picture');
 const commentsBlock = imageView.querySelector('.social__comments');
+const commentElement = commentsBlock.querySelector('.social__comment');
 const moreCommentsButton = imageView.querySelector('.comments-loader');
 
 // создает комментарий
 const createComment = ({ avatar, message, name }) => {
-  const commentElement = commentsBlock.querySelector('.social__comment');
   const comment = commentElement.cloneNode(true);
 
   comment.querySelector('.social__picture').src = avatar;

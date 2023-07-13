@@ -25,23 +25,15 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 
 // открывает окно просмотра изображения
-function openTargetElement (imgElement) {
+const openTargetElement = (imgElement) => {
   imgElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-}
-
-// закрывает окно просмотра изображения
-function closeTargetElement (imgElement) {
-  imgElement.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-}
-
-// закрывает окно просмотра изображения по кнопке Esc
-const onDocumentKeydown = (evt, targetElement, closeElement) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeElement(targetElement);
-  }
 };
 
-export { getRandomInteger, getRandomArrayElement, createId, openTargetElement, closeTargetElement, onDocumentKeydown };
+// закрывает окно просмотра изображения
+const closeTargetElement = (imgElement) => {
+  imgElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+};
+
+export { getRandomInteger, getRandomArrayElement, createId, openTargetElement, closeTargetElement, isEscapeKey };

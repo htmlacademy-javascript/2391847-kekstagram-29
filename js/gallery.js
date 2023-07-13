@@ -1,22 +1,39 @@
 import { createPhotoDescriptions } from './data.js';
 import { renderThumbnails } from './render-thumbnails.js';
 import { renderImageView } from './render-image-view.js';
-import { openTargetElement, closeTargetElement, onDocumentKeydown } from './util.js';
+import { openTargetElement, closeTargetElement, isEscapeKey } from './util.js';
 
 
 const thumbnailsList = document.querySelector('.pictures');
 const imageView = document.querySelector('.big-picture');
 const imageViewCloseButton = imageView.querySelector('.big-picture__cancel');
 
-const closeImageView = (targetElement) => {
-  closeTargetElement(targetElement);
-  document.addEventListener('keydown', (evt) => onDocumentKeydown(evt, targetElement, closeImageView));
+
+// закрывает окно просмотра изображения по кнопке Esc
+const onDocumentKeydownEsc = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeImageView();
+  }
 };
 
-const openImageView = (targetElement) => {
-  openTargetElement(targetElement);
-  document.addEventListener('keydown', (evt) => onDocumentKeydown(evt, targetElement, closeImageView));
-};
+function closeImageViewWrapper () {
+  closeImageView();
+}
+
+function closeImageView () {
+  closeTargetElement(imageView);
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
+  // пробуем удалять обработчик клика
+  imageViewCloseButton.removeEventListener('click', closeImageViewWrapper);
+
+}
+
+function openImageView () {
+  openTargetElement(imageView);
+  document.addEventListener('keydown', onDocumentKeydownEsc);
+}
+
 
 // открывает окно просмотра изображения при клике на миниатюру
 const onThumbnailClick = (evt, photoData) => {
@@ -27,12 +44,12 @@ const onThumbnailClick = (evt, photoData) => {
     const photoDataElement = photoData.find((element) => element.id === thumbnailId);
 
     renderImageView(photoDataElement);
-    openImageView(imageView);
+    openImageView();
+    thumbnail.blur(); //снимает фокус с миниатюры, чтобы при закрытии на Esc пропадали счетчики
 
     // добавляет слушателя события "клик" на крестик окна просмотра изображения
-    imageViewCloseButton.addEventListener('click', () => {
-      closeImageView(imageView);
-    });
+    imageViewCloseButton.addEventListener('click', closeImageViewWrapper);
+
   }
 };
 
