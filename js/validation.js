@@ -1,8 +1,9 @@
 const MAX_HASHTAG_AMOUNT = 5;
+const MAX_COMMENT_LENGTH = 140;
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const hashtagsField = imgUploadForm.querySelector('.text__hashtags');
-
+const commentField = imgUploadForm.querySelector('.text__description');
 
 const createPristineInstance = () => {
 
@@ -51,7 +52,6 @@ const createPristineInstance = () => {
 
   // проверяет есть ли повторения среди хеш-тегов
   const validateHashtagsRepeats = () => {
-    // const hashtags = hashtagsField.value.split(' ').filter((hashtag) => hashtag.trim() !== '');
     const hashtags = hashtagsField.value.split(' ')
       .filter((hashtag) => hashtag.trim() !== '')
       .map((hashtag) => hashtag.toLowerCase());
@@ -65,6 +65,9 @@ const createPristineInstance = () => {
     return hashtags.length === uniqueHashtags.size;
   };
 
+  // проверяет длину комментария
+  const validateCommentLength = () => commentField.value.length <= MAX_COMMENT_LENGTH;
+
 
   pristine.addValidator(hashtagsField, validateHashtagLength, 'Допустимая длина хеш-тега от 2 до 20 символов, включая "#".');
 
@@ -74,7 +77,10 @@ const createPristineInstance = () => {
 
   pristine.addValidator(hashtagsField, validateHashtagsRepeats, 'Хэш-теги повторяются. Каждый хэш-тег должен быть уникальным.');
 
+  pristine.addValidator(commentField, validateCommentLength, 'Допустимая длина комментария не более 140 символов.');
 
+  return pristine;
 };
+
 
 export { createPristineInstance };

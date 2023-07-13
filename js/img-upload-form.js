@@ -5,7 +5,7 @@ const uploadInput = imgUploadForm.querySelector('.img-upload__input');
 const imgOverlayForm = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadCloseButton = imgOverlayForm.querySelector('.img-upload__cancel');
 const hashtagsField = imgUploadForm.querySelector('.text__hashtags');
-
+const commentField = imgUploadForm.querySelector('.text__description');
 
 const initializeUploadForm = () => {
 
@@ -17,12 +17,18 @@ const initializeUploadForm = () => {
     }
   };
 
+  function closeImgOverlayFormWrapper () {
+    closeImgOverlayForm();
+  }
+
   // закрывает окно редактирования изображения
   function closeImgOverlayForm () {
-    if (document.activeElement !== hashtagsField) { // проверяет, что фокус не на поле для хеш-тега
+    // проверяет, что фокус не на поле для хеш-тега или комментария
+    if (document.activeElement !== hashtagsField && document.activeElement !== commentField) {
       closeTargetElement(imgOverlayForm);
       uploadInput.value = '';
       document.removeEventListener('keydown', onDocumentKeydownEsc);
+      imgUploadCloseButton.removeEventListener('click', closeImgOverlayFormWrapper);
     }
   }
 
@@ -37,13 +43,10 @@ const initializeUploadForm = () => {
     openImgOverlayForm();
 
     // добавляет слушателя события "клик" на крестик окна редактирования изображения
-    imgUploadCloseButton.addEventListener('click', () => {
-      closeImgOverlayForm(imgOverlayForm);
-
-    });
+    imgUploadCloseButton.addEventListener('click', closeImgOverlayFormWrapper);
   });
 
-  return imgUploadForm;
+  return { imgUploadForm, closeImgOverlayForm };
 };
 
 

@@ -17,12 +17,12 @@ const createComment = ({ avatar, message, name }) => {
 };
 
 // создает список комментариев
-const generateCommentsList = () => {
+const generateCommentsList = (comments) => {
   const commentsShown = imageView.querySelector('.comment-shown');
   const totalCommentsCount = imageView.querySelector('.comments-count');
   let commentsAmount = 0;
 
-  return function (comments) {
+  return function () {
     commentsAmount += COMMENTS_LOAD_LIMIT;
 
     if (commentsAmount >= comments.length) {
@@ -48,22 +48,14 @@ const generateCommentsList = () => {
 };
 
 // отрисовывает окно просмотра полноразмерного изображения и информации о фото
-const renderImageView = ({ url, description, likes, comments }) => {
+const renderImageView = ({ url, description, likes }) => {
 
   imageView.querySelector('.big-picture__img img').src = url;
   imageView.querySelector('.big-picture__img img').alt = description;
   imageView.querySelector('.social__caption').textContent = description;
   imageView.querySelector('.likes-count').textContent = likes;
 
-  // вызывает функцию замыкание для корректной работы счетчика комментов
-  const createCommentsList = generateCommentsList();
-  createCommentsList(comments);
-
-  // добавляет слушателя события "клик" на кнопку загрузки комментариев
-  moreCommentsButton.addEventListener('click', () => {
-    createCommentsList(comments);
-  });
 };
 
 
-export { renderImageView };
+export { renderImageView, generateCommentsList };
