@@ -23,30 +23,25 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 // проверяет нажатую клавишу
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-// закрывает окно просмотра изображения по кнопке Esc
-const onDocumentKeydown = (evt, targetElement, closeTargetElement) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeTargetElement(targetElement);
-  }
-};
 
 // открывает окно просмотра изображения
-function openImageView (imgElement) {
+function openTargetElement (imgElement) {
   imgElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-
-  // document.addEventListener('keydown', onDocumentKeydown(imgElement));
-  document.addEventListener('keydown', (evt) => onDocumentKeydown(evt, imgElement, closeImageView));
 }
 
 // закрывает окно просмотра изображения
-function closeImageView (imgElement) {
+function closeTargetElement (imgElement) {
   imgElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
-
-  document.removeEventListener('keydown', (evt) => onDocumentKeydown(evt, imgElement, closeImageView));
 }
 
+// закрывает окно просмотра изображения по кнопке Esc
+const onDocumentKeydown = (evt, targetElement, closeElement) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeElement(targetElement);
+  }
+};
 
-export { getRandomInteger, getRandomArrayElement, createId, openImageView, closeImageView };
+export { getRandomInteger, getRandomArrayElement, createId, openTargetElement, closeTargetElement, onDocumentKeydown };
