@@ -19,9 +19,7 @@ const createId = () => {
 // возвращет случайный элемент из массива заданной длины
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-
 // проверяет нажатую клавишу
 const isEscapeKey = (evt) => evt.key === 'Escape';
-
 
 export { getRandomInteger, getRandomArrayElement, createId, isEscapeKey };
