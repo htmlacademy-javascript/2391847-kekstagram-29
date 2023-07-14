@@ -19,9 +19,24 @@ const createId = () => {
 // возвращет случайный элемент из массива заданной длины
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+// удаляет лишние пробелы
+const normalizeWhitespace = (text) => text.replace(/\s+/g, ' ').trim();
 
 // проверяет нажатую клавишу
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 
-export { getRandomInteger, getRandomArrayElement, createId, isEscapeKey };
+// открывает окно просмотра изображения
+const openTargetElement = (imgElement) => {
+  imgElement.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+};
+
+// закрывает окно просмотра изображения
+const closeTargetElement = (imgElement) => {
+  imgElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+};
+
+
+export { getRandomInteger, getRandomArrayElement, createId, normalizeWhitespace, openTargetElement, closeTargetElement, isEscapeKey };

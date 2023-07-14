@@ -1,58 +1,78 @@
 import { createPhotoDescriptions } from './data.js';
 import { renderThumbnails } from './render-thumbnails.js';
-import { renderImageView } from './render-image-view.js';
-import { isEscapeKey } from './util.js';
+import { renderImageView, generateCommentsList } from './render-image-view.js';
+import { openTargetElement, closeTargetElement, isEscapeKey } from './util.js';
+
 
 const thumbnailsList = document.querySelector('.pictures');
 const imageView = document.querySelector('.big-picture');
 const imageViewCloseButton = imageView.querySelector('.big-picture__cancel');
-const commentCounterElement = imageView.querySelector('.social__comment-count');
 const moreCommentsButton = imageView.querySelector('.comments-loader');
+let createCommentsList;
 
-// отрисовывает миниатюры
-const photoDescriptions = createPhotoDescriptions();
-renderThumbnails(photoDescriptions);
+// функции обертки для корректного удаления обработчиков
+const createCommentsListWrapper = () => {
+  createCommentsList();
+};
+
+const closeImageViewWrapper = () => {
+  closeImageView();
+};
 
 // закрывает окно просмотра изображения по кнопке Esc
-const onDocumentKeydown = (evt) => {
+const onDocumentKeydownEsc = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeImageView();
   }
 };
 
+// закрывает окно просмотра изображения
+function closeImageView () {
+  closeTargetElement(imageView);
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
+  // пробуем удалять обработчик клика
+  imageViewCloseButton.removeEventListener('click', closeImageViewWrapper);
+  moreCommentsButton.removeEventListener('click', createCommentsListWrapper);
+}
 
 // открывает окно просмотра изображения
 function openImageView () {
-  imageView.classList.remove('hidden');
-
-  commentCounterElement.classList.add('hidden');
-  moreCommentsButton.classList.add('hidden');
-  document.body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onDocumentKeydown);
-}
-
-// закрывает окно просмотра изображения
-function closeImageView () {
-  imageView.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-
-  document.removeEventListener('keydown', onDocumentKeydown);
+  openTargetElement(imageView);
+  document.addEventListener('keydown', onDocumentKeydownEsc);
 }
 
 // открывает окно просмотра изображения при клике на миниатюру
-const onThumbnailClick = (evt) => {
-  if (evt.target.matches('img[class="picture__img"]')) {
+const onThumbnailClick = (evt, photoData) => {
+  const thumbnail = evt.target.closest('[data-index]');
+
+  if (thumbnail) {
+    const thumbnailId = +thumbnail.dataset.index;
+    const photoDataElement = photoData.find((element) => element.id === thumbnailId);
+
+    renderImageView(photoDataElement);
+    // вызывает функцию замыкание для корректного отображения комментов
+    createCommentsList = generateCommentsList(photoDataElement.comments);
+    createCommentsListWrapper();
+
     openImageView();
-    renderImageView(evt, photoDescriptions);
+    thumbnail.blur(); //снимает фокус с миниатюры, чтобы при закрытии на Esc пропадала плашка со счетчиками
+
+    // добавляет слушателей события "клик"
+    imageViewCloseButton.addEventListener('click', closeImageViewWrapper);
+    moreCommentsButton.addEventListener('click', createCommentsListWrapper);
   }
 };
 
-// добавляет слушателя события "клик" на контейнер с миниатюрами
-thumbnailsList.addEventListener('click', onThumbnailClick);
+// отрисовывает галлерею
+const renderGallery = () => {
+  const photoDescriptions = createPhotoDescriptions();
+  renderThumbnails(photoDescriptions);
 
-// добавляет слушателя события "клик" на крестик окна просмотра изображения
-imageViewCloseButton.addEventListener('click', () => {
-  closeImageView();
-});
+  // добавляет слушателя события "клик" на контейнер с миниатюрами
+  thumbnailsList.addEventListener('click', (evt) => {
+    onThumbnailClick(evt, photoDescriptions);
+  });
+};
+
+export { renderGallery };
