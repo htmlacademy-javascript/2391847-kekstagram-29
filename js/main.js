@@ -1,6 +1,6 @@
 import { renderGallery } from './gallery.js';
 import { initializeUploadForm } from './img-upload-form.js';
-import { createPristineInstance } from './validation.js';
+import { createPristineInstance, correctInputData } from './validation.js';
 
 renderGallery();
 
@@ -11,11 +11,14 @@ imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   if (pristine.validate()) {
-    // После успешной валидации отправляет форму на сервер
+    // Корректирует введенные данные перед отправкой
+    correctInputData();
+    // После успешной валидации отправляем форму на сервер
     imgUploadForm.submit();
-    // сбрасывает все поля формы и закрывает форму
+    // Сбрасываем все поля формы и закрываем форму
     imgUploadForm.reset();
     closeImgOverlayForm();
   }
+
 });
 

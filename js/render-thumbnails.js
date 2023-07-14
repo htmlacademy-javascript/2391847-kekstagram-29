@@ -32,5 +32,4 @@ const renderThumbnails = (photoDescriptions) => {
   return thumbnailsList.append(thumbnailsListFragment);
 };
 
-
 export { renderThumbnails };

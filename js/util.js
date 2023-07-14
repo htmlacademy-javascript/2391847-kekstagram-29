@@ -19,6 +19,8 @@ const createId = () => {
 // возвращет случайный элемент из массива заданной длины
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+// удаляет лишние пробелы
+const normalizeWhitespace = (text) => text.replace(/\s+/g, ' ').trim();
 
 // проверяет нажатую клавишу
 const isEscapeKey = (evt) => evt.key === 'Escape';
@@ -36,4 +38,5 @@ const closeTargetElement = (imgElement) => {
   document.body.classList.remove('modal-open');
 };
 
-export { getRandomInteger, getRandomArrayElement, createId, openTargetElement, closeTargetElement, isEscapeKey };
+
+export { getRandomInteger, getRandomArrayElement, createId, normalizeWhitespace, openTargetElement, closeTargetElement, isEscapeKey };

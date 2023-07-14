@@ -1,3 +1,5 @@
+import { normalizeWhitespace } from './util.js';
+
 const MAX_HASHTAG_AMOUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 
@@ -82,5 +84,14 @@ const createPristineInstance = () => {
   return pristine;
 };
 
+// корректирует содержимое текстовых полей - удаляет лишние пробелы
+const correctInputData = () => {
 
-export { createPristineInstance };
+  hashtagsField.value = normalizeWhitespace(hashtagsField.value);
+
+  if (commentField.value.trim() === '') {
+    commentField.value = '';
+  }
+};
+
+export { createPristineInstance, correctInputData };
