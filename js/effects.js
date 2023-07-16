@@ -72,23 +72,30 @@ noUiSlider.create(sliderElement, EFFECTS.none);
 
 // применяет выбранный эффект к изображению
 const setPreviewEffect = (name) => {
-  if (name === 'chrome' || name === 'sepia' || name === 'heat') {
-    imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value})`;
-  } else if (name === 'marvin') {
-    imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value}%)`;
-  } else if (name === 'phobos') {
-    imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value}px)`;
-  } else if (name === 'none') {
-    imgPreview.style.filter = '';
-
+  switch (name) {
+    case 'chrome':
+    case 'sepia':
+    case 'heat':
+      imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value})`;
+      break;
+    case 'marvin':
+      imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value}%)`;
+      break;
+    case 'phobos':
+      imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value}px)`;
+      break;
+    case 'none':
+      imgPreview.style.filter = '';
+      break;
   }
 };
 
 // обновляет опции слайдера и применяет эффект при клике на иконку эффекта
-const onEffectClick = (evt) => {
+const applySelectedEffect = (evt) => {
   const effectsItem = evt.target.closest('.effects__item');
 
   if (effectsItem) {
+    evt.preventDefault();
     currentEffectName = effectsItem.querySelector('input').value;
 
     sliderElement.noUiSlider.updateOptions(EFFECTS[currentEffectName]);
@@ -103,14 +110,18 @@ const onEffectClick = (evt) => {
 };
 
 // при изменении положения слайдера изменяет выбранный эффект
-const onSliderUpdate = () => {
+const updateSelectedEffect = () => {
+
   effectLevelInput.value = sliderElement.noUiSlider.get();
   setPreviewEffect(currentEffectName);
 };
 
+// сбрасывает настройки к дефолтным
 const resetPreviewEffect = () => {
+
   currentEffectName = 'none';
-  setPreviewEffect('currentEffectName');
+  imgPreview.style.filter = '';
+  setPreviewEffect(currentEffectName);
 };
 
-export { onEffectClick, onSliderUpdate, resetPreviewEffect };
+export { applySelectedEffect, updateSelectedEffect, resetPreviewEffect };

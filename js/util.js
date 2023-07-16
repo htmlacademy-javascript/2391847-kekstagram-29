@@ -28,12 +28,14 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 // открывает окно просмотра изображения
 const openTargetElement = (imgElement) => {
+
   imgElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
 
 // закрывает окно просмотра изображения
 const closeTargetElement = (imgElement) => {
+
   imgElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };

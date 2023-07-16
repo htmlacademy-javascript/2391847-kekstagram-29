@@ -1408,3 +1408,20 @@ main {
 .hidden {
   display: none;
 }
+
+/*класс для сообщений об ошибках pristine*/
+.img-upload__field-wrapper--error {
+
+
+  color: white;
+  border: 2px solid red;
+  border-radius: 5px; /* Закругление углов рамки */
+  background-color: rgba(255, 0, 0, 0.1); /* Полупрозрачный красный фон */
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-weight: 550;
+  padding: 1px 1px;
+  width: 450px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+
+}
