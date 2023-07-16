@@ -12,7 +12,6 @@ const createPristineInstance = () => {
   const pristine = new Pristine(imgUploadForm, {
     classTo: 'img-upload__field-wrapper',
     errorTextParent: 'img-upload__field-wrapper',
-
   });
 
   // проверяет формат хеш-тега
@@ -38,7 +37,6 @@ const createPristineInstance = () => {
 
     return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
   };
-
 
   // проверяет превышение количества хеш-тегов
   const validateHashtagsAmount = () => {
@@ -70,13 +68,9 @@ const createPristineInstance = () => {
   // проверяет длину комментария
   const validateCommentLength = () => commentField.value.length <= MAX_COMMENT_LENGTH;
 
-
   pristine.addValidator(hashtagsField, validateHashtagLength, 'Допустимая длина хеш-тега от 2 до 20 символов, включая "#".');
-
   pristine.addValidator(hashtagsField, validateHashtagFormat, 'Хэш-тег должен начинаться с "#" и содержать только буквы и цифры.');
-
   pristine.addValidator(hashtagsField, validateHashtagsAmount, 'Превышено количество хэш-тегов. Максимальное количество - 5.');
-
   pristine.addValidator(hashtagsField, validateHashtagsRepeats, 'Хэш-теги повторяются. Каждый хэш-тег должен быть уникальным.');
 
   pristine.addValidator(commentField, validateCommentLength, 'Допустимая длина комментария не более 140 символов.');
@@ -86,7 +80,6 @@ const createPristineInstance = () => {
 
 // корректирует содержимое текстовых полей - удаляет лишние пробелы
 const correctInputData = () => {
-
   hashtagsField.value = normalizeWhitespace(hashtagsField.value);
 
   if (commentField.value.trim() === '') {
