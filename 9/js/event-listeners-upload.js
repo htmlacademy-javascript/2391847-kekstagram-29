@@ -2,7 +2,7 @@ import { increaseScaleValue, decreaseScaleValue } from './scale.js';
 import { isEscapeKey } from './util.js';
 import { applySelectedEffect, updateSelectedEffect } from './effects.js';
 import { closeImgOverlayForm } from './img-upload-form.js';
-import { correctMarginStyle } from './validation.js';
+import { correctMarginStyle } from './form-validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgOverlayForm = imgUploadForm.querySelector('.img-upload__overlay');

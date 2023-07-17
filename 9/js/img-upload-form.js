@@ -1,7 +1,7 @@
 import { openTargetElement, closeTargetElement } from './util.js';
 import { normalizeScaleValue } from './scale.js';
 import { resetPreviewEffect } from './effects.js';
-import { pristine, resetMarginStyle } from './validation.js';
+import { pristine, resetMarginStyle } from './form-validation.js';
 import { addEventListeners, removeEventListeners } from './event-listeners-upload.js';
 
 
