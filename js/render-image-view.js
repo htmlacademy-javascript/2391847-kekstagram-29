@@ -1,53 +1,61 @@
-// const serverAdress = 'http://localhost:3000/';
+const COMMENTS_LOAD_LIMIT = 5;
 
 const imageView = document.querySelector('.big-picture');
-const imageDescription = imageView.querySelector('.social__caption');
-const likesCount = imageView.querySelector('.likes-count');
-const fullSizeImage = imageView.querySelector('.big-picture__img img');
-const commentsCount = imageView.querySelector('.comments-count');
 const commentsBlock = imageView.querySelector('.social__comments');
+const commentElement = commentsBlock.querySelector('.social__comment');
+const moreCommentsButton = imageView.querySelector('.comments-loader');
 
 // создает комментарий
 const createComment = ({ avatar, message, name }) => {
-  const commentElement = document.createElement('li');
-  commentElement.classList.add('social__comment');
+  const comment = commentElement.cloneNode(true);
 
-  commentElement.innerHTML = `
-    <img class="social__picture" src="${avatar}" alt="${name}" width="35" height="35">
-    <p class="social__text">${message}</p>
-  `;
+  comment.querySelector('.social__picture').src = avatar;
+  comment.querySelector('.social__picture').alt = name;
+  comment.querySelector('.social__text').textContent = message;
 
-  return commentElement;
+  return comment;
 };
 
 // создает список комментариев
-const createCommentsList = (comments) => {
-  const commentsListFragment = document.createDocumentFragment();
+const generateCommentsList = (comments) => {
+  const commentsShown = imageView.querySelector('.comment-shown');
+  const totalCommentsCount = imageView.querySelector('.comments-count');
+  let commentsAmount = 0;
 
-  commentsBlock.innerHTML = '';
+  return function () {
+    commentsAmount += COMMENTS_LOAD_LIMIT;
 
-  comments.forEach((element) => {
-    const comment = createComment(element);
-    commentsListFragment.append(comment);
-  });
+    if (commentsAmount >= comments.length) {
+      commentsAmount = comments.length;
+      moreCommentsButton.classList.add('hidden');
+    } else {
+      moreCommentsButton.classList.remove('hidden');
+    }
 
-  return commentsBlock.append(commentsListFragment);
+    const commentsListFragment = document.createDocumentFragment();
+    for (let i = 0; i < commentsAmount; i++) {
+      const comment = createComment(comments[i]);
+      commentsListFragment.append(comment);
+    }
+
+    commentsShown.textContent = commentsAmount;
+    totalCommentsCount.textContent = comments.length;
+
+    commentsBlock.innerHTML = '';
+
+    return commentsBlock.append(commentsListFragment);
+  };
 };
-
 
 // отрисовывает окно просмотра полноразмерного изображения и информации о фото
-const renderImageView = (evt, photoData) => {
-  const thumbnailUrl = evt.target.getAttribute('src');
-  const { url, description, likes, comments } = photoData.find((element) =>
-    element.url === thumbnailUrl
-  );
+const renderImageView = ({ url, description, likes }) => {
 
-  fullSizeImage.src = url;
-  fullSizeImage.alt = description;
-  imageDescription.textContent = description;
-  likesCount.textContent = likes;
-  commentsCount.textContent = comments.length;
-  createCommentsList(comments);
+  imageView.querySelector('.big-picture__img img').src = url;
+  imageView.querySelector('.big-picture__img img').alt = description;
+  imageView.querySelector('.social__caption').textContent = description;
+  imageView.querySelector('.likes-count').textContent = likes;
+
 };
 
-export { renderImageView };
+
+export { renderImageView, generateCommentsList };
