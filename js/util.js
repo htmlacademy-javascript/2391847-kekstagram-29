@@ -25,7 +25,6 @@ const normalizeWhitespace = (text) => text.replace(/\s+/g, ' ').trim();
 // проверяет нажатую клавишу
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-
 // открывает окно просмотра изображения
 const openTargetElement = (imgElement) => {
 
