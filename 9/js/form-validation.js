@@ -22,12 +22,18 @@ const pristine = new Pristine(imgUploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
+// получает хеш-теги из строки
+const normalizeHashtag = (hashtagsString) => hashtagsString
+  .split(' ')
+  .filter((hashtag) => hashtag.trim() !== '');
+
+
 // проверяет формат хеш-тега
 const validateHashtagFormat = () => {
   const hashtagRegex = /^#[a-zа-яё0-9]+$/i;
-  const hashtags = hashtagsField.value.split(' ').filter((hashtag) => hashtag.trim() !== '');
+  const hashtags = normalizeHashtag(hashtagsField.value);
 
-  if (hashtagsField.value === '') {
+  if (hashtags.length === 1 && hashtags[0] === '#') {
     return true;
   }
 
@@ -37,22 +43,14 @@ const validateHashtagFormat = () => {
 // проверяет длину хеш-тега
 const validateHashtagLength = () => {
   const hashtagRegex = /^.{2,20}$/;
-  const hashtags = hashtagsField.value.split(' ').filter((hashtag) => hashtag.trim() !== '');
-
-  if (hashtagsField.value === '') {
-    return true;
-  }
+  const hashtags = normalizeHashtag(hashtagsField.value);
 
   return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
 };
 
 // проверяет превышение количества хеш-тегов
 const validateHashtagsAmount = () => {
-  const hashtags = hashtagsField.value.split(' ').filter((hashtag) => hashtag.trim() !== '');
-
-  if (hashtagsField.value === '') {
-    return true;
-  }
+  const hashtags = normalizeHashtag(hashtagsField.value);
 
   return hashtags.length <= MAX_HASHTAG_AMOUNT;
 };
@@ -60,15 +58,10 @@ const validateHashtagsAmount = () => {
 
 // проверяет есть ли повторения среди хеш-тегов
 const validateHashtagsRepeats = () => {
-  const hashtags = hashtagsField.value.split(' ')
-    .filter((hashtag) => hashtag.trim() !== '')
+  const hashtags = normalizeHashtag(hashtagsField.value)
     .map((hashtag) => hashtag.toLowerCase());
 
   const uniqueHashtags = new Set(hashtags);
-
-  if (hashtagsField.value === '') {
-    return true;
-  }
 
   return hashtags.length === uniqueHashtags.size;
 };
@@ -81,10 +74,10 @@ const validateCommentLength = () => commentField.value.length <= MAX_COMMENT_LEN
 const getErrorMessage = (errorType) => ERROR_MESSAGES[errorType];
 
 
-pristine.addValidator(hashtagsField, validateHashtagLength, getErrorMessage('hashtagLength'));
-pristine.addValidator(hashtagsField, validateHashtagFormat, getErrorMessage('hashtagFormat'));
-pristine.addValidator(hashtagsField, validateHashtagsAmount, getErrorMessage('hashtagsAmount'));
-pristine.addValidator(hashtagsField, validateHashtagsRepeats, getErrorMessage('hashtagsRepeats'));
+pristine.addValidator(hashtagsField, validateHashtagLength, getErrorMessage('hashtagLength'), 3);
+pristine.addValidator(hashtagsField, validateHashtagFormat, getErrorMessage('hashtagFormat'), 4);
+pristine.addValidator(hashtagsField, validateHashtagsAmount, getErrorMessage('hashtagsAmount'), 1);
+pristine.addValidator(hashtagsField, validateHashtagsRepeats, getErrorMessage('hashtagsRepeats'), 2);
 
 pristine.addValidator(commentField, validateCommentLength, getErrorMessage('commentLength'));
 
