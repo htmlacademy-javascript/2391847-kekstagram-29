@@ -1,7 +1,8 @@
 import { increaseScaleValue, decreaseScaleValue } from './scale.js';
 import { isEscapeKey } from './util.js';
-import { onEffectClick, onSliderUpdate } from './effects.js';
+import { applySelectedEffect, updateSelectedEffect } from './effects.js';
 import { closeImgOverlayForm } from './img-upload-form.js';
+import { correctMarginStyle } from './validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgOverlayForm = imgUploadForm.querySelector('.img-upload__overlay');
@@ -11,6 +12,7 @@ const scaleControlBigger = imgOverlayForm.querySelector('.scale__control--bigger
 const effectsList = imgOverlayForm.querySelector('.effects__list');
 const sliderConteiner = document.querySelector('.img-upload__effect-level');
 const sliderElement = sliderConteiner.querySelector('.effect-level__slider');
+const hashtagsField = imgUploadForm.querySelector('.text__hashtags');
 
 
 const onDocumentKeydownEsc = (evt) => {
@@ -21,46 +23,52 @@ const onDocumentKeydownEsc = (evt) => {
 };
 
 // функции обертки для корректного удаления подписок на события
-function closeImgOverlayFormWrapper () {
+const onImgUploadCloseButtonClick = () => {
   closeImgOverlayForm();
-}
+};
 
-function increaseScaleValueWrapper () {
+const onScaleControlBiggerClick = () => {
   increaseScaleValue();
-}
+};
 
-function decreaseScaleValueWrapper () {
+const onScaleControlSmallerClick = () => {
   decreaseScaleValue();
-}
+};
 
-function onEffectClickWrapper (evt) {
-  onEffectClick(evt);
-}
+const onEffectElementClick = (evt) => {
+  applySelectedEffect(evt);
+};
 
-function onSliderUpdateWrapper () {
-  onSliderUpdate();
-}
+const onsliderElementUpdate = () => {
+  updateSelectedEffect();
+};
+
+const onHashtagsFieldChange = () => {
+  correctMarginStyle();
+};
 
 // добавляет подписки
 const addEventListeners = () => {
 
   document.addEventListener('keydown', onDocumentKeydownEsc);
-  imgUploadCloseButton.addEventListener('click', closeImgOverlayFormWrapper);
-  scaleControlSmaller.addEventListener('click', decreaseScaleValueWrapper);
-  scaleControlBigger.addEventListener('click', increaseScaleValueWrapper);
-  effectsList.addEventListener('change', onEffectClickWrapper);
-  sliderElement.noUiSlider.on('update', onSliderUpdateWrapper);
+  imgUploadCloseButton.addEventListener('click', onImgUploadCloseButtonClick);
+  scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+  scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+  effectsList.addEventListener('change', onEffectElementClick);
+  sliderElement.noUiSlider.on('update', onsliderElementUpdate);
+  hashtagsField.addEventListener('input', onHashtagsFieldChange);
 };
 
 // удаляет подписки
 const removeEventListeners = () => {
 
   document.removeEventListener('keydown', onDocumentKeydownEsc);
-  imgUploadCloseButton.removeEventListener('click', closeImgOverlayFormWrapper);
-  scaleControlSmaller.removeEventListener('click', decreaseScaleValueWrapper);
-  scaleControlBigger.removeEventListener('click', increaseScaleValueWrapper);
-  effectsList.removeEventListener('change', onEffectClickWrapper);
-  sliderElement.noUiSlider.off('update', onSliderUpdateWrapper);
+  imgUploadCloseButton.removeEventListener('click', onImgUploadCloseButtonClick);
+  scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+  scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+  effectsList.removeEventListener('change', onEffectElementClick);
+  sliderElement.noUiSlider.off('update', onsliderElementUpdate);
+  hashtagsField.addEventListener('input', onHashtagsFieldChange);
 };
 
 

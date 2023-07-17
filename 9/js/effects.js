@@ -85,10 +85,11 @@ const setPreviewEffect = (name) => {
 };
 
 // обновляет опции слайдера и применяет эффект при клике на иконку эффекта
-const onEffectClick = (evt) => {
+const applySelectedEffect = (evt) => {
   const effectsItem = evt.target.closest('.effects__item');
 
   if (effectsItem) {
+    evt.preventDefault();
     currentEffectName = effectsItem.querySelector('input').value;
 
     sliderElement.noUiSlider.updateOptions(EFFECTS[currentEffectName]);
@@ -103,7 +104,7 @@ const onEffectClick = (evt) => {
 };
 
 // при изменении положения слайдера изменяет выбранный эффект
-const onSliderUpdate = () => {
+const updateSelectedEffect = () => {
 
   effectLevelInput.value = sliderElement.noUiSlider.get();
   setPreviewEffect(currentEffectName);
@@ -114,7 +115,7 @@ const resetPreviewEffect = () => {
 
   currentEffectName = 'none';
   imgPreview.style.filter = '';
-  setPreviewEffect('currentEffectName');
+  setPreviewEffect(currentEffectName);
 };
 
-export { onEffectClick, onSliderUpdate, resetPreviewEffect };
+export { applySelectedEffect, updateSelectedEffect, resetPreviewEffect };

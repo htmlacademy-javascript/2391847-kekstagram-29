@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { closeImageView, createCommentsListWrapper } from './gallery.js';
+import { closeImageView, onMoreCommentsButtonClick } from './gallery.js';
 
 const imageView = document.querySelector('.big-picture');
 const imageViewCloseButton = imageView.querySelector('.big-picture__cancel');
@@ -7,7 +7,7 @@ const moreCommentsButton = imageView.querySelector('.comments-loader');
 
 
 // функции обертки для корректного удаления обработчиков
-const closeImageViewWrapper = () => {
+const onImageViewCloseButtonClick = () => {
   closeImageView();
 };
 
@@ -24,16 +24,16 @@ const onDocumentKeydownEsc = (evt) => {
 const addEventListeners = () => {
 
   document.addEventListener('keydown', onDocumentKeydownEsc);
-  imageViewCloseButton.addEventListener('click', closeImageViewWrapper);
-  moreCommentsButton.addEventListener('click', createCommentsListWrapper);
+  imageViewCloseButton.addEventListener('click', onImageViewCloseButtonClick);
+  moreCommentsButton.addEventListener('click', onMoreCommentsButtonClick);
 };
 
 // удаляет подписки
 const removeEventListeners = () => {
 
   document.removeEventListener('keydown', onDocumentKeydownEsc);
-  imageViewCloseButton.removeEventListener('click', closeImageViewWrapper);
-  moreCommentsButton.removeEventListener('click', createCommentsListWrapper);
+  imageViewCloseButton.removeEventListener('click', onImageViewCloseButtonClick);
+  moreCommentsButton.removeEventListener('click', onMoreCommentsButtonClick);
 };
 
 export { addEventListeners, removeEventListeners };
