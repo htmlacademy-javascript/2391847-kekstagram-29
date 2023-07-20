@@ -25,8 +25,11 @@ const openImgOverlayForm = () => {
 
 // закрывает окно редактирования изображения
 const closeImgOverlayForm = () => {
-  // проверяет, что фокус не на поле для хеш-тега или комментария
-  if (document.activeElement !== hashtagsField && document.activeElement !== commentField) {
+  // проверяет, что фокус не на поле для хеш-тега или комментария, и что не показана ошибка
+  const messageElement = document.querySelector('.error__shown');
+  if (document.activeElement !== hashtagsField &&
+      document.activeElement !== commentField &&
+      !messageElement) {
     closeTargetElement(imgOverlayForm);
     uploadInput.value = '';
     resetPreviewEffect();
