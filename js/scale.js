@@ -1,4 +1,4 @@
-const SCALE = {
+const Scale = {
   STEP: 25,
   MIN: 25,
   MAX: 100,
@@ -16,13 +16,13 @@ const changeScaleValue = (step) => {
   let changedScaleValue;
 
   if (step === undefined) {
-    changedScaleValue = SCALE.MAX;
+    changedScaleValue = Scale.MAX;
 
   } else {
     const currentScaleValue = parseInt(scaleControlInput.value, 10);
     changedScaleValue = currentScaleValue + step;
 
-    if (changedScaleValue > SCALE.MAX || changedScaleValue < SCALE.MIN) {
+    if (changedScaleValue > Scale.MAX || changedScaleValue < Scale.MIN) {
       return;
     }
   }
@@ -31,11 +31,11 @@ const changeScaleValue = (step) => {
 };
 
 const increaseScaleValue = () => {
-  changeScaleValue(SCALE.STEP);
+  changeScaleValue(Scale.STEP);
 };
 
 const decreaseScaleValue = () => {
-  changeScaleValue(-SCALE.STEP);
+  changeScaleValue(-Scale.STEP);
 };
 
 const normalizeScaleValue = () => {

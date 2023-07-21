@@ -1,4 +1,3 @@
-import { createPhotoDescriptions } from './data.js';
 import { renderThumbnails } from './render-thumbnails.js';
 import { renderImageView, generateCommentsList } from './render-image-view.js';
 import { openTargetElement, closeTargetElement } from './util.js';
@@ -49,8 +48,7 @@ const onThumbnailClick = (evt, photoData) => {
 };
 
 // отрисовывает галлерею
-const renderGallery = () => {
-  const photoDescriptions = createPhotoDescriptions();
+const renderGallery = (photoDescriptions) => {
   renderThumbnails(photoDescriptions);
 
   // добавляет подписку на "клик" на контейнер с миниатюрами

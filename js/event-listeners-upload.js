@@ -39,7 +39,7 @@ const onEffectElementClick = (evt) => {
   applySelectedEffect(evt);
 };
 
-const onsliderElementUpdate = () => {
+const onSliderElementUpdate = () => {
   updateSelectedEffect();
 };
 
@@ -55,7 +55,7 @@ const addEventListeners = () => {
   scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   effectsList.addEventListener('change', onEffectElementClick);
-  sliderElement.noUiSlider.on('update', onsliderElementUpdate);
+  sliderElement.noUiSlider.on('update', onSliderElementUpdate);
   hashtagsField.addEventListener('input', onHashtagsFieldChange);
 };
 
@@ -67,8 +67,8 @@ const removeEventListeners = () => {
   scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
   scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   effectsList.removeEventListener('change', onEffectElementClick);
-  sliderElement.noUiSlider.off('update', onsliderElementUpdate);
-  hashtagsField.addEventListener('input', onHashtagsFieldChange);
+  sliderElement.noUiSlider.off('update', onSliderElementUpdate);
+  hashtagsField.removeEventListener('input', onHashtagsFieldChange);
 };
 
 
