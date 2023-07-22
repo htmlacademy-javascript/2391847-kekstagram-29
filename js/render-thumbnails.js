@@ -1,8 +1,5 @@
-
 const thumbnailsList = document.querySelector('.pictures');
-const thumbnailsTemplate = document
-  .querySelector('#picture')
-  .content.querySelector('.picture');
+const thumbnailsTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
 // создает одну миниаюру
 const createThumbnail = ({ id, url, description, likes, comments }) => {
@@ -17,7 +14,6 @@ const createThumbnail = ({ id, url, description, likes, comments }) => {
   return thumbnailElement;
 };
 
-
 // отрисовывает массив миниатюр
 const renderThumbnails = (photoDescriptions) => {
   const thumbnailsListFragment = document.createDocumentFragment();
@@ -26,6 +22,8 @@ const renderThumbnails = (photoDescriptions) => {
     const thumbnail = createThumbnail(element);
     thumbnailsListFragment.append(thumbnail);
   });
+
+  thumbnailsList.querySelectorAll('.picture').forEach((element) => element.remove());
 
   return thumbnailsList.append(thumbnailsListFragment);
 };

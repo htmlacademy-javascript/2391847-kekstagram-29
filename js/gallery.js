@@ -3,27 +3,23 @@ import { renderImageView, generateCommentsList } from './render-image-view.js';
 import { openTargetElement, closeTargetElement } from './util.js';
 import { addEventListeners, removeEventListeners } from './event-listeners-gallery.js';
 
-
 const thumbnailsList = document.querySelector('.pictures');
 const imageView = document.querySelector('.big-picture');
 let createCommentsList;
 
-// функция замыкание для отображения комментов
+// показывает комментарии при нажатии на кнопку загрузки комментов
 const onMoreCommentsButtonClick = () => {
   createCommentsList();
 };
 
-
 // закрывает окно просмотра изображения
 const closeImageView = () => {
-
   closeTargetElement(imageView);
   removeEventListeners();
 };
 
 // открывает окно просмотра изображения
 const openImageView = () => {
-
   openTargetElement(imageView);
 };
 
@@ -39,7 +35,7 @@ const onThumbnailClick = (evt, photoData) => {
     renderImageView(photoDataElement);
 
     createCommentsList = generateCommentsList(photoDataElement.comments);
-    onMoreCommentsButtonClick(); // вызывает функцию-обертку для корректного отображения комментов
+    onMoreCommentsButtonClick();
 
     openImageView();
     thumbnail.blur(); //снимает фокус с миниатюры, чтобы при закрытии на Esc пропадала плашка со счетчиками
@@ -51,10 +47,7 @@ const onThumbnailClick = (evt, photoData) => {
 const renderGallery = (photoDescriptions) => {
   renderThumbnails(photoDescriptions);
 
-  // добавляет подписку на "клик" на контейнер с миниатюрами
-  thumbnailsList.addEventListener('click', (evt) => {
-    onThumbnailClick(evt, photoDescriptions);
-  });
+  thumbnailsList.addEventListener('click', (evt) => onThumbnailClick(evt, photoDescriptions));
 };
 
 export { renderGallery, closeImageView, onMoreCommentsButtonClick };

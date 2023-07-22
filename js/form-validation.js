@@ -3,11 +3,16 @@ import { normalizeWhitespace } from './util.js';
 const MAX_HASHTAG_AMOUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 
+const MarginBottom = {
+  NORMAL: '20px',
+  LOW: '5px',
+};
+
 const imgUploadForm = document.querySelector('.img-upload__form');
 const hashtagsField = imgUploadForm.querySelector('.text__hashtags');
 const commentField = imgUploadForm.querySelector('.text__description');
 
-
+// инициализирует pristine для валидации формы
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -18,7 +23,6 @@ const pristine = new Pristine(imgUploadForm, {
 const normalizeHashtag = (hashtagsString) => hashtagsString
   .split(' ')
   .filter((hashtag) => hashtag.trim() !== '');
-
 
 // проверяет формат хеш-тега
 const validateHashtagFormat = () => {
@@ -56,7 +60,6 @@ const validateHashtagsRepeats = () => {
 // проверяет длину комментария
 const validateCommentLength = () => commentField.value.length <= MAX_COMMENT_LENGTH;
 
-
 // корректирует содержимое текстовых полей - удаляет лишние пробелы
 const correctInputData = () => {
   hashtagsField.value = normalizeWhitespace(hashtagsField.value);
@@ -66,18 +69,18 @@ const correctInputData = () => {
   }
 };
 
-// корректирует отступы между полями и сообщениями об ошибках
+// корректирует отступы между полями ввода и сообщениями об ошибках
 const correctMarginStyle = () => {
   const isHashtagsFieldValid = pristine.validate(hashtagsField);
-  hashtagsField.style.marginBottom = isHashtagsFieldValid ? '20px' : '5px';
+  hashtagsField.style.marginBottom = isHashtagsFieldValid ? MarginBottom.NORMAL : MarginBottom.LOW;
 };
 
 // сбрасывает отступы между полями и сообщениями об ошибках
 const resetMarginStyle = () => {
-  hashtagsField.style.marginBottom = '20px';
+  hashtagsField.style.marginBottom = MarginBottom.NORMAL;
 };
 
-
+// массив данных объявленных валидаторов
 const validators = [
   {
     field: hashtagsField,
@@ -114,6 +117,5 @@ const validators = [
 for (const { field, validator, errorMessage, priority } of validators) {
   pristine.addValidator(field, validator, errorMessage, priority);
 }
-
 
 export { pristine, correctInputData, correctMarginStyle, resetMarginStyle };
