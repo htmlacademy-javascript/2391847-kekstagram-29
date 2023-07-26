@@ -39,7 +39,6 @@ const generateCommentsList = (comments) => {
 
     shownCommentsCount.textContent = commentsAmount;
     totalCommentsCount.textContent = comments.length;
-
     commentsBlock.innerHTML = '';
 
     return commentsBlock.append(commentsListFragment);
