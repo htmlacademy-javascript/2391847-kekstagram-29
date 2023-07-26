@@ -1,44 +1,46 @@
-import { isEscapeKey } from './util.js';
+import { checkKeydownEsc } from './util.js';
 import { closeMessage } from './errors.js';
 
+let closeFunctions;
 
-// функции обертки для корректного удаления обработчиков
-const onCloseButtonClick = (messageElement, closeButton) => {
-  closeMessage(messageElement, closeButton);
-};
-
-// функции обертки для корректного удаления обработчиков
-const onOutsideClick = (evt, messageElement, closeButton) => {
-  const messageWindow = messageElement.querySelector('div');
-  if (!messageWindow.contains(evt.target)) {
+const initCloseFunctions = (messageElement, closeButton) => {
+  // закрывает сообщение при клике на кнопку
+  const onCloseButtonClick = () => {
     closeMessage(messageElement, closeButton);
-  }
-};
+  };
+  // закрывает сообщение при клике мимо сообщения
+  const onOutsideClick = (evt) => {
+    const messageWindow = messageElement.querySelector('div');
+    if (!messageWindow.contains(evt.target)) {
+      closeMessage(messageElement, closeButton);
+    }
+  };
+  // закрывает сообщение по кнопке Esc
+  const onDocumentKeydownEsc = (evt) => {
+    checkKeydownEsc(evt, () => closeMessage(messageElement, closeButton));
+  };
 
-// закрывает окно просмотра изображения по кнопке Esc
-const onDocumentKeydownEsc = (evt, messageElement, closeButton) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-
-    closeMessage(messageElement, closeButton);
-  }
+  return {onCloseButtonClick, onOutsideClick, onDocumentKeydownEsc};
 };
 
 // добавляет подписки
 const addEventListeners = (messageElement, closeButton) => {
+  closeFunctions = initCloseFunctions(messageElement, closeButton);
 
-  closeButton.addEventListener('click', () => onCloseButtonClick(messageElement, closeButton));
-  document.addEventListener('click', (evt) => onOutsideClick(evt, messageElement, closeButton));
-  document.addEventListener('keydown', (evt) => onDocumentKeydownEsc(evt, messageElement, closeButton));
+  closeButton.addEventListener('click', closeFunctions.onCloseButtonClick);
+  document.addEventListener('click', closeFunctions.onOutsideClick);
+  document.addEventListener('keydown', closeFunctions.onDocumentKeydownEsc);
+
+  return {messageElement, closeButton};
 };
 
 // удаляет подписки
-const removeEventListeners = (messageElement, closeButton) => {
+const removeEventListeners = (closeButton) => {
+  closeButton.removeEventListener('click', closeFunctions.onCloseButtonClick);
+  document.removeEventListener('click', closeFunctions.onOutsideClick);
+  document.removeEventListener('keydown', closeFunctions.onDocumentKeydownEsc);
 
-  closeButton.removeEventListener('click', () => onCloseButtonClick(messageElement, closeButton));
-  document.removeEventListener('click', (evt) => onOutsideClick(evt, messageElement, closeButton));
-  document.removeEventListener('keydown', (evt) => onDocumentKeydownEsc(evt, messageElement, closeButton));
+  closeFunctions = '';
 };
-
 
 export { addEventListeners, removeEventListeners };

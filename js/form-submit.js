@@ -1,7 +1,4 @@
-import { sendData } from './api.js';
 import { pristine, correctInputData } from './form-validation.js';
-import { showSuccessSendMessage, showErrorSendMessage } from './errors.js';
-import { closeImgOverlayForm } from './img-upload-form.js';
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -10,7 +7,6 @@ const SubmitButtonText = {
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const submitButton = document.querySelector('.img-upload__submit');
-
 
 // блокирует кнопку сохранить
 const blockSubmitButton = () => {
@@ -24,27 +20,19 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-
-const setUserFormSubmit = () => {
+// добавляет подписку на отправку формы
+const setUserFormSubmit = (callback) => {
   imgUploadForm.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
     if (pristine.validate()) {
-      correctInputData(); // корректирует введенные данные перед отправкой
+      correctInputData();
       blockSubmitButton();
-
-      try {
-        await sendData(new FormData(evt.target));
-        closeImgOverlayForm();
-        showSuccessSendMessage();
-      } catch {
-        showErrorSendMessage();
-      } finally {
-        unblockSubmitButton();
-      }
+      const data = new FormData(evt.target);
+      await callback(data);
+      unblockSubmitButton();
     }
   });
 };
-
 
 export { setUserFormSubmit };

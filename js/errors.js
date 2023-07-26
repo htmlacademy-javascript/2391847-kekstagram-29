@@ -2,10 +2,15 @@ import { addEventListeners, removeEventListeners } from './event-listeners-error
 
 const LINE_HEIGHT = '40px';
 const FONT_SIZE = '24px';
+const MS_PER_SECOND = 1000;
 
 const ErrorText = {
   PRELOAD: 'Повторная попытка загрузки... Пожалуйста, подождите ',
-  LOAD: 'Не удалось загрузить данные.<br>Возможно, сервер временно недоступен.<br>Пожалуйста,<br>проверьте свое интернет-соединение или попробуйте обновить страницу.',
+  LOAD: 'Не удалось загрузить данные. Возможно, сервер временно недоступен. Пожалуйста, проверьте свое интернет-соединение или попробуйте обновить страницу.',
+};
+
+const ButtonText = {
+  UPDATE_PAGE: 'Обновить страницу',
 };
 
 const ElementId = {
@@ -18,7 +23,6 @@ const ElementClass = {
   ERROR: '.error',
   PRELOAD: '.preload',
 };
-
 
 // показывает сообщение
 const createMessage = (elementId, elementClass) => {
@@ -38,7 +42,6 @@ const closeMessage = (messageElement, closeButton) => {
   removeEventListeners(messageElement, closeButton);
 };
 
-
 // показывает сообщение об успешной отправке
 const showSuccessSendMessage = () => {
   const messageElement = createMessage(ElementId.SUCCESS, ElementClass.SUCCESS);
@@ -48,7 +51,6 @@ const showSuccessSendMessage = () => {
 
   addEventListeners(messageElement, closeButton);
 };
-
 
 // показывает сообщение об ошибке при отправке
 const showErrorSendMessage = () => {
@@ -60,19 +62,18 @@ const showErrorSendMessage = () => {
   addEventListeners(messageElement, closeButton);
 };
 
-
 // показывает сообщение об ошибке при загрузке
 const showErrorLoadMessage = () => {
   const errorLoadMessage = createMessage(ElementId.ERROR, ElementClass.ERROR);
 
   const errorMessageText = errorLoadMessage.querySelector('.error__title');
-  errorMessageText.innerHTML = ErrorText.LOAD.replace(/\n/g, '<br>');
+  errorMessageText.textContent = ErrorText.LOAD;
 
   errorMessageText.style.lineHeight = LINE_HEIGHT;
   errorMessageText.style.fontSize = FONT_SIZE;
 
   const closeButton = errorLoadMessage.querySelector('.error__button');
-  closeButton.textContent = 'Обновить страницу';
+  closeButton.textContent = ButtonText.UPDATE_PAGE;
 
   const errorPreloadMessage = document.querySelector('.preload');
   if (errorPreloadMessage) {
@@ -80,13 +81,10 @@ const showErrorLoadMessage = () => {
   }
 
   document.body.append(errorLoadMessage);
-
   closeButton.addEventListener('click', () => window.location.reload());
-  // подписка на событие удалится автоматически при перезагрузке
 
   return errorLoadMessage;
 };
-
 
 // показывает сообщение об ошибке при загрузке
 const showPreloadMessage = (retriesCount, delayTime) => {
@@ -101,7 +99,7 @@ const showPreloadMessage = (retriesCount, delayTime) => {
   }
 
   const errorMessageText = errorLoadMessage.querySelector('.error__title');
-  errorMessageText.textContent = `${ErrorText.PRELOAD}${(retriesCount * delayTime) / 1000} сек.`;
+  errorMessageText.textContent = `${ErrorText.PRELOAD}${(retriesCount * delayTime) / MS_PER_SECOND} сек.`;
   errorMessageText.style.lineHeight = LINE_HEIGHT;
 
   document.body.append(errorLoadMessage);

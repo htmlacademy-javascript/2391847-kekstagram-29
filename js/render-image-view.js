@@ -8,7 +8,6 @@ const moreCommentsButton = imageView.querySelector('.comments-loader');
 // создает комментарий
 const createComment = ({ avatar, message, name }) => {
   const comment = commentElement.cloneNode(true);
-
   comment.querySelector('.social__picture').src = avatar;
   comment.querySelector('.social__picture').alt = name;
   comment.querySelector('.social__text').textContent = message;
@@ -18,7 +17,7 @@ const createComment = ({ avatar, message, name }) => {
 
 // создает список комментариев
 const generateCommentsList = (comments) => {
-  const commentsShown = imageView.querySelector('.comment-shown');
+  const shownCommentsCount = imageView.querySelector('.comment-shown');
   const totalCommentsCount = imageView.querySelector('.comments-count');
   let commentsAmount = 0;
 
@@ -38,7 +37,7 @@ const generateCommentsList = (comments) => {
       commentsListFragment.append(comment);
     }
 
-    commentsShown.textContent = commentsAmount;
+    shownCommentsCount.textContent = commentsAmount;
     totalCommentsCount.textContent = comments.length;
 
     commentsBlock.innerHTML = '';
@@ -49,13 +48,10 @@ const generateCommentsList = (comments) => {
 
 // отрисовывает окно просмотра полноразмерного изображения и информации о фото
 const renderImageView = ({ url, description, likes }) => {
-
   imageView.querySelector('.big-picture__img img').src = url;
   imageView.querySelector('.big-picture__img img').alt = description;
   imageView.querySelector('.social__caption').textContent = description;
   imageView.querySelector('.likes-count').textContent = likes;
-
 };
-
 
 export { renderImageView, generateCommentsList };

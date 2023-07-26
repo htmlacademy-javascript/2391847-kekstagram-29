@@ -1,4 +1,4 @@
-const EFFECTS = {
+const effectsConfig = {
   none: {
     filter: '',
     range: {
@@ -56,19 +56,16 @@ const EFFECTS = {
   },
 };
 
-
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgOverlayForm = imgUploadForm.querySelector('.img-upload__overlay');
-const imgPreview = imgOverlayForm
-  .querySelector('.img-upload__preview')
-  .querySelector('img');
+const imgPreview = imgOverlayForm.querySelector('.img-upload__preview img');
 const sliderConteiner = document.querySelector('.img-upload__effect-level');
 const sliderElement = sliderConteiner.querySelector('.effect-level__slider');
 const effectLevelInput = sliderConteiner.querySelector('.effect-level__value');
 let currentEffectName;
 
 // cоздает слайдер
-noUiSlider.create(sliderElement, EFFECTS.none);
+noUiSlider.create(sliderElement, effectsConfig.none);
 
 // применяет выбранный эффект к изображению
 const setPreviewEffect = (name) => {
@@ -76,13 +73,13 @@ const setPreviewEffect = (name) => {
     case 'chrome':
     case 'sepia':
     case 'heat':
-      imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value})`;
+      imgPreview.style.filter = `${effectsConfig[name].filter}(${effectLevelInput.value})`;
       break;
     case 'marvin':
-      imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value}%)`;
+      imgPreview.style.filter = `${effectsConfig[name].filter}(${effectLevelInput.value}%)`;
       break;
     case 'phobos':
-      imgPreview.style.filter = `${EFFECTS[name].filter}(${effectLevelInput.value}px)`;
+      imgPreview.style.filter = `${effectsConfig[name].filter}(${effectLevelInput.value}px)`;
       break;
     case 'none':
       imgPreview.style.filter = '';
@@ -90,7 +87,7 @@ const setPreviewEffect = (name) => {
   }
 };
 
-// обновляет опции слайдера и применяет эффект при клике на иконку эффекта
+// обновляет опции слайдера и применяет выбранный эффект
 const applySelectedEffect = (evt) => {
   const effectsItem = evt.target.closest('.effects__item');
 
@@ -98,7 +95,7 @@ const applySelectedEffect = (evt) => {
     evt.preventDefault();
     currentEffectName = effectsItem.querySelector('input').value;
 
-    sliderElement.noUiSlider.updateOptions(EFFECTS[currentEffectName]);
+    sliderElement.noUiSlider.updateOptions(effectsConfig[currentEffectName]);
     setPreviewEffect(currentEffectName);
 
     if (currentEffectName === 'none') {
@@ -109,16 +106,14 @@ const applySelectedEffect = (evt) => {
   }
 };
 
-// при изменении положения слайдера изменяет выбранный эффект
+// изменяет выбранный эффект
 const updateSelectedEffect = () => {
-
   effectLevelInput.value = sliderElement.noUiSlider.get();
   setPreviewEffect(currentEffectName);
 };
 
 // сбрасывает настройки к дефолтным
 const resetPreviewEffect = () => {
-
   currentEffectName = 'none';
   imgPreview.style.filter = '';
   setPreviewEffect(currentEffectName);

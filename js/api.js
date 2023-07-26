@@ -18,8 +18,7 @@ const Method = {
 // устанавливает задержку
 const setDelay = (ms) => new Promise ((resolve) => setTimeout(resolve, ms));
 
-
-// метод для отправки / получения данных
+// функция для отправки / получения данных
 const load = async (route, method = Method.GET, body = null) => {
   const response = await fetch(route, { method, body });
   if (!response.ok) {
@@ -28,8 +27,7 @@ const load = async (route, method = Method.GET, body = null) => {
   return response.json();
 };
 
-
-// метод для отправки / получения данных с повторными попытками
+// функция для отправки / получения данных с повторными попытками
 const loadWithRetries = async (route, method = Method.GET, body = null, retriesCount = RETRIES_COUNT) => {
   try {
     return await load(`${BASE_URL}${route}`, method, body);
@@ -44,12 +42,10 @@ const loadWithRetries = async (route, method = Method.GET, body = null, retriesC
   }
 };
 
-
-// метод для получения данных
+// функция для получения данных с сервера
 const getData = () => loadWithRetries(Route.GET_DATA);
 
-// метод для  отправки данных
+// функция для отправки данных на сервер
 const sendData = (body) => loadWithRetries(Route.SEND_DATA, Method.POST, body, 0);
-
 
 export { getData, sendData };
